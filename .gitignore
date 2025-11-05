@@ -1,6 +1,21 @@
-node_modules
-dist
-.env
-.env.local
-.vscode
+# 공통
 .DS_Store
+Thumbs.db
+*.log
+.env
+
+# React
+react/node_modules/
+react/build/
+react/.env
+
+# Express
+express/node_modules/
+express/.env
+
+# Flask
+python/venv/
+python/__pycache__/
+python/*.pyc
+python/.env
+
