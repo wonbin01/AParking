@@ -10,7 +10,6 @@ app.get('/api/parking-lot/:buildingId',async (req,res) => {
 
     console.log(`${buildingId} 주차장 상태 요청 받음`);
     const parkingStatus= await getLatestParkingStatus(buildingId);
-    //여기서 실제 주차장 상태를 조회하는 로직을 구현해야 함
     res.json({ success: true, data: parkingStatus });
 })
 
