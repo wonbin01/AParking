@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { login } from '../../service/LoginService.js';
+import { login } from '../../service/login/LoginService.js';
 
 dotenv.config();
 

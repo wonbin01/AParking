@@ -3,7 +3,7 @@ import authRoutes from './controller/login/auth.js';
 import dotenv from 'dotenv';
 import {applyCors} from "./configuration/corsConfig.js";
 import buildingSelector from './controller/building/BuildingSelector.js';
-import './redis/redisSubscriber.js';
+import './service/redis/redisSubscriber.js';
 import initialize from './controller/caching/initialize.js';
 
 const app = express();

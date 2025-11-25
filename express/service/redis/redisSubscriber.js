@@ -1,6 +1,6 @@
 import redis from "./redisConfig.js";
 import { broadcast } from "../socket/webSocket.js";
-import { getLatestParkingStatus, saveParkingStatusDB} from "../repository/redis/RedisRepository.js";
+import { getLatestParkingStatus, saveParkingStatusDB} from "../../repository/redis/RedisRepository.js";
 
 const buildingIds=["paldal","library","yulgok","yeonam"];
 const cache={};
