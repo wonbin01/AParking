@@ -1,15 +1,14 @@
-# app/state.py
 from typing import Dict
 
-# building_id 별로 {slot_id: occupied} 저장
-_last_state: Dict[int, Dict[int, int]] = {}
+# building 별로 {slot_id: occupied} 저장
+_building_state: Dict[str, Dict[int, int]] = {}
 
 
-def get_last_state(building_id: int) -> Dict[int, int]:
-    # 이전 상태를 복사 없이 그대로 반환
-    return _last_state.get(building_id, {})
+def get_building_state(building: str) -> Dict[int, int]:
+    # 이전 상태 반환
+    return _building_state.get(building, {})
 
 
-def set_last_state(building_id: int, snapshot: Dict[int, int]) -> None:
-    # 현재 스냅샷을 그대로 저장
-    _last_state[building_id] = snapshot
+def set_building_state(building: str, snapshot: Dict[int, int]) -> None:
+    # 현재 스냅샷 저장
+    _building_state[building] = snapshot # 팔달의 카메라만사용. cameraid필요없음
