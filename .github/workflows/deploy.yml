@@ -1,0 +1,32 @@
+name: Deploy Express Backend
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "express/**"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to Amazon Linux server
+        uses: appleboy/ssh-action@0.1.7
+        with:
+          host: ${{ secrets.AMAZON_LINUX_HOST }}
+          username: ${{ secrets.AMAZON_LINUX_USERNAME }}
+          key: ${{ secrets.AMAZON_LINUX_SSH_KEY }}
+          port: ${{ secrets.AMAZON_LINUX_SSH_PORT }}
+          script: |
+            cd /home/ec2-user/express/express
+            
+            git pull origin main
+            npm install
+
+            echo "${{ secrets.DOTENV }}" > .env
+
+            pm2 restart all
