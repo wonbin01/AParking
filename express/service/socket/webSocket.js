@@ -5,7 +5,12 @@ import { getLatestParkingStatus } from "../../repository/redis/RedisRepository.j
 
 dotenv.config();
 
-const wss = new WebSocketServer({ port: 8081 }); //WebSocket 연결을 기다리는 서버를 띄움
+const wss = new WebSocketServer({ 
+    port: 8081,
+    handleProtocols: (protocols, req) => {
+        return [...protocols][0] || false;
+    }
+});
 
 wss.on("connection", async (ws,req) => { //클라이언트가 연결 시 실행
     const url=new URL(req.url, `http://${req.headers.host}`);
