@@ -1,5 +1,6 @@
 name: Deploy Express Backend
 
+# main 브랜치의 express 폴더가 변경될 때만 실행
 on:
   push:
     branches: ["main"]
@@ -11,9 +12,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      # 코드 체크아웃
+      - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Node.js 설치 (EC2에서 실행되므로 필수는 아니지만, 필요 시 옵션)
+      - name: Setup Node.js (Local check, optional)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          check-latest: true   # 설치만 하고 npm ci 자동 실행 방지
+
+      # EC2로 배포
       - name: Deploy to Amazon Linux server
         uses: appleboy/ssh-action@0.1.7
         with:
@@ -22,11 +32,16 @@ jobs:
           key: ${{ secrets.AMAZON_LINUX_SSH_KEY }}
           port: ${{ secrets.AMAZON_LINUX_SSH_PORT }}
           script: |
+            # repo 루트로 이동 후 전체 코드 업데이트
             cd /home/ec2-user/express
             git pull origin main
+
+            # Express 앱 폴더로 이동 후 npm 설치
             cd /home/ec2-user/express/express
             npm install
 
+            # .env 파일 생성 (GitHub Secret 사용)
             echo "${{ secrets.DOTENV }}" > .env
 
+            # pm2로 앱 재시작 (등록된 앱 이름 사용)
             pm2 restart a-parking
