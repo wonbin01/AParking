@@ -29,4 +29,4 @@ jobs:
 
             echo "${{ secrets.DOTENV }}" > .env
 
-            pm2 restart all
+            pm2 restart a-parking
