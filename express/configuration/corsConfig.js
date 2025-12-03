@@ -3,7 +3,8 @@ import cors from "cors";
 export const corsOptions = {
   origin: [
     "http://localhost:5173",       
-    "https://a-parking.vercel.app"
+    "https://a-parking.vercel.app",
+    "https://a-parking-4fufdqnmz-wonbin01s-projects.vercel.app"
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
 };
