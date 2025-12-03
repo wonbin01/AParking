@@ -22,9 +22,9 @@ jobs:
           key: ${{ secrets.AMAZON_LINUX_SSH_KEY }}
           port: ${{ secrets.AMAZON_LINUX_SSH_PORT }}
           script: |
-            cd /home/ec2-user/express/express
-            
+            cd /home/ec2-user/express
             git pull origin main
+            cd /home/ec2-user/express/express
             npm install
 
             echo "${{ secrets.DOTENV }}" > .env
