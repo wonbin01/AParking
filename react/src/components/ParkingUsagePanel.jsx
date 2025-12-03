@@ -50,55 +50,63 @@ function ParkingUsagePanel({ profileCarNumber }) {
 
     // (2) 컴포넌트 마운트 시, 현재 주차 상태 한 번 조회
     useEffect(() => {
-        const initParkingState = async () => {
-            setParkingLoading(true)
-            setParkingError('')
+    const initParkingState = async () => {
+        setParkingLoading(true)
+        setParkingError('')
 
-            try {
-                const data = await previewParkingFee()
-                // 현재 입차중
+        try {
+            const data = await previewParkingFee()
+            // 데이터 안에 실제 입차 기록이 있는지 체크
+            if (!data?.carNumber || !data?.duration_minutes) {
+                // 입차 기록 없음
+                setParkingStage('idle')
+                setParkingInfo(null)
+                setStatusText(
+                    '현재 진행 중인 주차가 없습니다.\n"입차하기" 버튼을 눌러 주차를 시작해 주세요.'
+                )
+            } else {
+                // 입차 기록 있음
                 setParkingInfo(data)
                 setParkingStage('entered')
                 setLastUpdated(new Date())
 
-                const minutes = data.duration_minutes ?? 0
+                const minutes = data.duration_minutes
                 const h = Math.floor(minutes / 60)
                 const m = minutes % 60
-
                 setStatusText(
                     `현재 입차 중입니다.\n` +
                     `현재까지 예상 요금은 ${data.expect_fee.toLocaleString()}원 입니다.\n` +
                     `이용 시간 : ${h}시간 ${m}분`,
                 )
-            } catch (error) {
-                const status = error?.response?.status
-                const msg = error?.response?.data?.message
-
-                // 진행 중인 주차가 없으면 idle로
-                if (status === 400 && msg && msg.includes('활성')) {
-                    setParkingStage('idle')
-                    setParkingInfo(null)
-                    setStatusText(
-                        '현재 진행 중인 주차가 없습니다.\n' +
-                        '"입차하기" 버튼을 눌러 주차를 시작해 주세요.',
-                    )
-                } else {
-                    console.error(
-                        '초기 주차 상태 조회 실패:',
-                        status,
-                        msg || error,
-                    )
-                    setParkingError(
-                        '현재 주차 정보를 불러오는 중 오류가 발생했습니다.',
-                    )
-                }
-            } finally {
-                setParkingLoading(false)
             }
+        } catch (error) {
+            const status = error?.response?.status
+            const msg = error?.response?.data?.message
+            // 진행 중인 주차가 없으면 idle로
+            if (status === 400 && msg && msg.includes('활성')) {
+                setParkingStage('idle')
+                setParkingInfo(null)
+                setStatusText(
+                    '현재 진행 중인 주차가 없습니다.\n' +
+                    '"입차하기" 버튼을 눌러 주차를 시작해 주세요.',
+                )
+            } else {
+                console.error(
+                    '초기 주차 상태 조회 실패:',
+                    status,
+                    msg || error,
+                )
+                setParkingError(
+                    '현재 주차 정보를 불러오는 중 오류가 발생했습니다.',
+                )
+            }
+        } finally {
+            setParkingLoading(false)
         }
+    }
 
-        initParkingState()
-    }, [])
+    initParkingState()
+}, [])
 
     // 1) 입차하기
     const handleEnter = async () => {
