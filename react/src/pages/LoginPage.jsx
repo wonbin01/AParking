@@ -1,32 +1,34 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { loginApi } from '../api/auth'
-import { useAuth } from '../hooks/useAuth'
-import Header from '../components/Header'
+import { loginApi } from '../api/auth.js'
+import { useAuth } from '../hooks/useAuth.jsx'
+import Header from '../components/Header.jsx'
+import userIcon from '../assets/icons/loginid.svg'
+import lockIcon from '../assets/icons/loginpwd.svg'
+import parkingicon from '../assets/icons/parking_blue.png'
 
 export default function LoginPage() {
-    const [id, setId] = useState('')
-    const [pw, setPw] = useState('')
+    const [id, setId] = useState('') //id관리
+    const [pw, setPw] = useState('') //pw 관리
     const [error, setError] = useState('')
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false) //loading 화면 관리
 
     const { login, isAuthenticated } = useAuth()
     const navigate = useNavigate()
 
-    // 이미 로그인된 경우 리다이렉트 처리
     useEffect(() => {
-        if (isAuthenticated) {
+        if (isAuthenticated) { //이미 로그인된 상태면 로그인 페이지에서 내보내기
             navigate('/')
         }
     }, [isAuthenticated, navigate])
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => { //로그인 버튼 눌렀을 때
         e.preventDefault()
         setError('')
         setLoading(true)
 
         try {
-            const data = await loginApi(id, pw)
+            const data = await loginApi(id, pw) //login api 호출
             login(data.accessToken, data.member)
             navigate('/')
         } catch (err) {
@@ -42,40 +44,69 @@ export default function LoginPage() {
 
     return (
         <div className="min-h-screen flex flex-col bg-[#f5f7fb]">
-            {/* 공통 헤더 */}
+            {/* 상단 공통 헤더 */}
             <Header />
 
-            <main className="flex-1 flex items-center justify-center px-4">
+            {/* 가운데 카드 */}
+            <main className="flex-1 flex items-center justify-center px-4 py-6 sm:py-8">
                 <div className="w-full max-w-md">
-                    <section className="bg-white rounded-2xl shadow-lg px-12 py-10">
-                        <h2 className="text-sm font-semibold text-[#174ea6] text-center tracking-wide mb-8">
-                            AJOU UNIV. 주차 관리 시스템
-                        </h2>
+                    <section className="bg-white rounded-2xl shadow-lg px-6 py-8 sm:px-10 sm:py-9 md:px-12 md:py-10">
+                        {/* 로고 + 타이틀 영역 */}
+                        <div className="flex flex-col items-center mb-8">
+                            <h1 className="text-2xl sm:text-3xl font-semibold text-[#174ea6] mb-4">
+                                A Parking
+                            </h1>
+                            <img
+                                src={parkingicon}
+                                alt="parking icon"
+                                className="w-16 h-16 sm:w-20 sm:h-20 mb-4"
+                            />
+                            <p className="text-xs sm:text-sm font-semibold text-[#174ea6] tracking-wide text-center">
+                                AJOU UNIV. 주차 관리 시스템
+                            </p>
+                        </div>
 
+                        {/* 로그인 폼 */}
                         <form className="space-y-5" onSubmit={handleSubmit}>
+                            {/* 사용자 ID */}
                             <div className="space-y-2">
-                                <label className="block text-sm text-slate-700">
+                                <label className="block text-xs sm:text-sm text-slate-700">
                                     사용자 ID
                                 </label>
-                                <input
-                                    className="w-full rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#174ea6] focus:border-[#174ea6]"
-                                    placeholder="아이디를 입력하세요"
-                                    value={id}
-                                    onChange={(e) => setId(e.target.value)}
-                                />
+                                <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                                    <img
+                                        src={userIcon}
+                                        alt="user icon"
+                                        className="w-5 h-5 opacity-60"
+                                    />
+                                    <input
+                                        className="flex-1 bg-transparent outline-none text-sm placeholder:text-slate-400"
+                                        placeholder="사용자 ID를 입력해주세요"
+                                        value={id}
+                                        onChange={(e) => setId(e.target.value)}
+                                    />
+                                </div>
                             </div>
 
+                            {/* 비밀번호 */}
                             <div className="space-y-2">
-                                <label className="block text-sm text-slate-700">
+                                <label className="block text-xs sm:text-sm text-slate-700">
                                     비밀번호
                                 </label>
-                                <input
-                                    className="w-full rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#174ea6] focus:border-[#174ea6]"
-                                    placeholder="비밀번호를 입력하세요"
-                                    type="password"
-                                    value={pw}
-                                    onChange={(e) => setPw(e.target.value)}
-                                />
+                                <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                                    <img
+                                        src={lockIcon}
+                                        alt="lock icon"
+                                        className="w-5 h-5 opacity-60"
+                                    />
+                                    <input
+                                        className="flex-1 bg-transparent outline-none text-sm placeholder:text-slate-400"
+                                        placeholder="비밀번호를 입력해주세요"
+                                        type="password"
+                                        value={pw}
+                                        onChange={(e) => setPw(e.target.value)}
+                                    />
+                                </div>
                             </div>
 
                             {error && (
