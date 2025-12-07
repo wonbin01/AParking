@@ -3,7 +3,7 @@ import { broadcast } from "../socket/webSocket.js";
 import { getLatestParkingStatus, saveParkingStatusDB} from "../../repository/redis/RedisRepository.js";
 import { saveStatus } from "../../service/congestion/CongestionService.js";
 
-const buildingIds=["paldal","library","yulgok","yeonam"];
+export const buildingIds=["paldal","library","yulgok","yeonam"];
 
 async function initCache() {
     for (const buildingId of buildingIds) {
