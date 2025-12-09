@@ -19,6 +19,12 @@ async function initCache() {
     }
 }
 
+buildingIds.forEach((buildingId) => {
+    redis.subscribe(`parking-status-${buildingId}`, () => {
+        console.log(`${buildingId} 주차장 상태 채널 구독 시작`);
+    });
+});
+
 redis.on("message", async (channel, message) => {
     const data = JSON.parse(message);
     const buildingId = data.buildingId;

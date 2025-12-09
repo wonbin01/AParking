@@ -18,9 +18,9 @@ export async function getLatestParkingStatus(buildingId) {
 
 export async function saveParkingStatusDB(buildingId, slotMap) {
     const query = `
-        UPDATE slot_status
-        SET occupied = ?
-        WHERE building_id = ? AND slot_number = ?
+        update slot_status
+        set occupied = ?
+        where building_id = ? and slot_number = ?
     `;
     try {
         for(const slot of Object.values(slotMap)) {

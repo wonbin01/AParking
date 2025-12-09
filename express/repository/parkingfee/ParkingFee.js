@@ -25,9 +25,9 @@ export async function saveStatus(car_number) {
 
 export async function getEntryTime(car_number) {
     const sql = `
-        SELECT entry_time, car_id
-        FROM parking_status
-        WHERE car_number = ? AND paid = false
+        select entry_time, car_id
+        from parking_status
+        where car_number = ? and paid = false
     `;
     const [rows] = await pool.query(sql, [car_number]);
     if (!rows[0]) return null;
