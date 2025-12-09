@@ -33,4 +33,4 @@ jobs:
             npm install
 
             # 3-4. pm2 앱 재시작
-            pm2 restart a-parking-server
+            pm2 restart a_parking_server
